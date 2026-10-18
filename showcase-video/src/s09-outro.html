@@ -1,0 +1,49 @@
+<!-- id=s09 duration=6.8 -->
+<style>
+  .s09-tok { position: absolute; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
+  #s09-flash { left: 318px; top: 469px; width: 444px; height: 982px; border-radius: 40px; background: radial-gradient(circle at 50% 50%, rgba(127,216,208,0.9), rgba(127,216,208,0) 70%); }
+  #s09-name { font-weight: 700; font-size: 130px; letter-spacing: -0.045em; line-height: 1; color: #f1f6f5; }
+</style>
+<div id="s09-wrap" class="wrap">
+  <div id="s09-phone" class="phone" style="left: 305px; top: 456px">
+    <div class="screen"><img src="assets/screens/02-today-cards.png" alt="" /></div>
+    <div class="glare"></div>
+  </div>
+  <div id="s09-flash" class="abs"></div>
+  <!-- One token per style, orbiting before they fly back into the screen. -->
+  <div id="s09-t0" class="s09-tok glass"><svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="32" fill="none" stroke="#E9D7A5" stroke-width="4" /></svg></div>
+  <div id="s09-t1" class="s09-tok" style="background: linear-gradient(160deg, #ffb05c, #ff6fa8 60%, #9b6bff)"><svg width="70" height="90" viewBox="0 0 70 90"><path d="M35,6 C50,30 62,44 62,58 A27,27 0 0 1 8,58 C8,44 20,30 35,6 Z" fill="rgba(255,255,255,0.9)" /></svg></div>
+  <div id="s09-t2" class="s09-tok glass"><svg width="100" height="60" viewBox="0 0 100 60"><path d="M4,40 C24,4 40,4 50,30 S80,56 96,14" fill="none" stroke="#7fd8d0" stroke-width="7" stroke-linecap="round" /></svg></div>
+  <div id="s09-t3" class="s09-tok glass"><svg width="90" height="90" viewBox="0 0 90 90"><polygon points="45,10 80,28 45,46 10,28" fill="#a6f3ea" /><polygon points="10,28 45,46 45,84 10,66" fill="#2a7f78" /><polygon points="80,28 45,46 45,84 80,66" fill="#46b9ad" /></svg></div>
+  <div id="s09-t4" class="s09-tok" style="background: #f1dcc3; border: 8px solid #fff; border-radius: 50%"><span style="font-size: 80px">☕</span></div>
+  <div id="s09-t5" class="s09-tok" style="background: #29366f; border-radius: 8px"><svg width="80" height="80" viewBox="0 0 10 10" shape-rendering="crispEdges"><rect x="3" y="0" width="2" height="2" fill="#257179" /><rect x="2" y="2" width="6" height="6" fill="#38b764" /><rect x="1" y="3" width="8" height="4" fill="#38b764" /><rect x="3" y="3" width="2" height="2" fill="#a7f070" /></svg></div>
+  <div class="head" style="top: 1520px">
+    <span id="s09-name" class="block">Meal Tracker</span>
+    <span id="s09-sub" class="sub block" style="margin-top: 22px">Your meals, understood.</span>
+    <span id="s09-foot" class="eyebrow block" style="margin-top: 34px; font-size: 22px">Phone · Galaxy Watch · Gemini · Health Connect</span>
+  </div>
+</div>
+<script>
+  var E = "expo.out", S = "sine.inOut";
+  // Token orbit positions around the phone.
+  var POS = [[150, 600], [930, 560], [120, 1000], [960, 1000], [170, 1390], [910, 1400]];
+  POS.forEach(function (p, i) { var t = $("#s09-t" + i); t.style.left = p[0] + "px"; t.style.top = p[1] + "px"; });
+  tl.fromTo("#s09-wrap", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+  tl.fromTo("#s09-phone", { y: 300, scale: 0.9, transformPerspective: 2000, rotationX: 20 }, { y: 0, scale: 1, rotationX: 0, duration: 1.0, ease: E }, 0);
+  tl.set("#s09-flash", { opacity: 0 }, 0);
+  POS.forEach(function (p, i) {
+    var id = "#s09-t" + i;
+    tl.fromTo(id, { scale: 0, rotation: -30, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.5, ease: "back.out(2)" }, 0.4 + i * 0.1);
+    tl.to(id, { y: (i % 2 ? -1 : 1) * 30, duration: 1.2, ease: S }, 1.0);
+    // Fly back into the screen: shrink toward the screen centre, slightly into depth.
+    tl.to(id, { x: 540 - p[0], y: 960 - p[1], scale: 0.05, rotation: i % 2 ? 140 : -140, opacity: 0.2, duration: 0.6, ease: "power3.in" }, 2.1 + i * 0.12);
+  });
+  tl.to("#s09-flash", { opacity: 1, duration: 0.2 }, 2.95);
+  tl.to("#s09-flash", { opacity: 0, duration: 0.6 }, 3.15);
+  tl.fromTo("#s09-phone", { scale: 1 }, { scale: 1.04, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.out" }, 2.95);
+  tl.to("#s09-phone", { y: -120, scale: 0.86, duration: 1.0, ease: "power3.inOut" }, 3.4);
+  tl.fromTo("#s09-name", { opacity: 0, y: 30, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: E }, 3.7);
+  tl.fromTo("#s09-sub", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.7, ease: S }, 4.1);
+  tl.fromTo("#s09-foot", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 4.5);
+  tl.to("#s09-wrap", { opacity: 0, duration: 0.6 }, 6.2);
+</script>

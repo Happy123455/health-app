@@ -1,0 +1,72 @@
+<!-- id=s02 duration=7 -->
+<style>
+  #s02-ground { inset: -90px; background: radial-gradient(900px 1200px at 50% 55%, #121c2c, #070b12 75%); }
+  #s02 .lift { box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+  #s02-photo { left: 220px; top: 740px; width: 660px; height: 660px; border-radius: 50%; background: url("assets/screens/15-meal.png") no-repeat; background-size: 900px auto; background-position: -125px -282px; }
+  .s02-label { position: absolute; font-family: "Instrument Serif", serif; color: #E9D7A5; text-align: left; }
+  .s02-label .n { display: block; font-size: 76px; line-height: 1; }
+  .s02-label .k { display: block; font-family: "Inter", sans-serif; font-weight: 500; font-size: 22px; letter-spacing: 0.28em; text-transform: uppercase; color: #a69a78; margin-top: 8px; }
+  .s02-serif { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 120px; line-height: 1; color: #f4ecd6; letter-spacing: -0.01em; }
+  #s02 svg path, #s02 svg circle, #s02 svg line { fill: none; stroke: #E9D7A5; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+<div id="s02-wrap" class="wrap">
+  <div id="s02-ground" class="abs"></div>
+  <div id="s02-phone" class="phone" style="left: 305px; top: 456px">
+    <div class="screen"><img src="assets/screens/15-meal.png" alt="" /></div>
+    <div class="glare"></div>
+  </div>
+  <div id="s02-hole" class="hole"></div>
+  <div id="s02-lift" class="lift"></div>
+  <div id="s02-photo" class="abs"></div>
+  <svg id="s02-svg" class="abs" style="left: 0; top: 0; filter: drop-shadow(0 0 6px rgba(233, 215, 165, 0.55))" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <path id="s02-shape" d="M360,608 L725,608 Q745,608 745,628 L745,914 Q745,934 725,934 L360,934 Q340,934 340,914 L340,628 Q340,608 360,608 Z" />
+    <circle id="s02-b1" cx="420" cy="880" r="105" />
+    <circle id="s02-b2" cx="350" cy="1140" r="95" />
+    <circle id="s02-b3" cx="720" cy="1110" r="150" />
+    <path id="s02-ln1" d="M317,837 L250,770 L70,770" />
+    <path id="s02-ln2" d="M783,837 L850,770 L1010,770" />
+    <path id="s02-ln3" d="M317,1303 L250,1370 L70,1370" />
+    <path id="s02-ln4" d="M783,1303 L850,1370 L1010,1370" />
+  </svg>
+  <div id="s02-t1" class="s02-label" style="left: 70px; top: 650px"><span class="n">904</span><span class="k">kcal</span></div>
+  <div id="s02-t2" class="s02-label" style="left: 790px; top: 650px"><span class="n">25 g</span><span class="k">protein</span></div>
+  <div id="s02-t3" class="s02-label" style="left: 70px; top: 1390px"><span class="n">117 g</span><span class="k">carbs</span></div>
+  <div id="s02-t4" class="s02-label" style="left: 790px; top: 1390px"><span class="n">6/10</span><span class="k">health</span></div>
+  <div class="head" style="top: 150px">
+    <span id="s02-eyebrow" class="eyebrow block" style="color: #E9D7A5">Gemini meal analysis</span>
+    <span id="s02-l1" class="s02-serif block" style="margin-top: 26px">One photo.</span>
+    <span id="s02-l2" class="s02-serif block" style="font-style: italic; color: #E9D7A5">Every nutrient.</span>
+  </div>
+</div>
+<script>
+  var IMG = "assets/screens/15-meal.png";
+  lift($("#s02-lift"), 305, 456, IMG, 36, 226, 656, 528);
+  hole($("#s02-hole"), 305, 456, 36, 226, 656, 528);
+  var LINE = "cubic-bezier(0.65,0,0.35,1)";
+  var PLATE = "M550,740 C732,740 880,888 880,1070 C880,1252 732,1400 550,1400 C368,1400 220,1252 220,1070 C220,888 368,740 550,740 Z";
+
+  tl.fromTo("#s02-wrap", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+  // The photo lifts out of the meal screen…
+  tl.fromTo("#s02-hole", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.45);
+  tl.fromTo("#s02-lift", { z: 0, rotationX: 0, transformPerspective: 1600 }, { z: 260, rotationX: -10, y: -40, duration: 0.7, ease: "expo.out" }, 0.45);
+  tl.to("#s02-phone, #s02-hole", { y: 1100, opacity: 0, duration: 0.8, ease: "power3.in" }, 1.0);
+  // …and dissolves into a single gold line tracing its edge.
+  tl.fromTo("#s02-shape", { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.7, ease: LINE }, 0.9);
+  tl.to("#s02-lift", { opacity: 0, duration: 0.45 }, 1.15);
+  // The line bends into a plate (shape morph keeps it one continuous line).
+  tl.to("#s02-shape", { morphSVG: PLATE, duration: 0.9, ease: LINE }, 1.55);
+  tl.fromTo("#s02-b1, #s02-b2, #s02-b3", { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.6, ease: LINE, stagger: 0.18 }, 2.35);
+  // Line-to-fill: the real meal fills the plate from its centre.
+  tl.fromTo("#s02-photo", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.9, ease: "power2.inOut" }, 3.05);
+  tl.to("#s02-b1, #s02-b2, #s02-b3", { opacity: 0, duration: 0.5 }, 3.35);
+  // Leader lines reach out to the numbers.
+  tl.fromTo("#s02-ln1, #s02-ln2, #s02-ln3, #s02-ln4", { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.55, ease: LINE, stagger: 0.16 }, 3.8);
+  tl.fromTo("#s02-t1, #s02-t2, #s02-t3, #s02-t4", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "sine.out", stagger: 0.16 }, 4.15);
+  // Type.
+  tl.fromTo("#s02-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.4);
+  tl.fromTo("#s02-l1", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "sine.out" }, 1.6);
+  tl.fromTo("#s02-l2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "sine.out" }, 4.4);
+  // Dolly out and hand over.
+  tl.to("#s02-wrap", { scale: 0.95, duration: 2.0, ease: "sine.inOut" }, 4.6);
+  tl.to("#s02-wrap", { opacity: 0, duration: 0.4 }, 6.6);
+</script>

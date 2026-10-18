@@ -1,5 +1,7 @@
 # Meal Tracker
 
+**Showcase:** [docs/showcase.mp4](docs/showcase.mp4), a 58-second dark 3D app showcase. Each feature lifts out of the real app screen into its own motion style (line art, liquid, shape morph, isometric, sticker explainer, pixel art, glass). Made with HyperFrames; source in [showcase-video/](showcase-video/).
+
 **Promo:** [docs/promo.mp4](docs/promo.mp4), a 60-second 3 AM infomercial about the app (made with HyperFrames; source in [promo-video/](promo-video/), soundtrack synthesized by `promo-video/scripts/synth.py`).
 
 A personal Android app for the Galaxy S23 Ultra. Take a photo of a meal and the rest is automatic:

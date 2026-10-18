@@ -1,0 +1,128 @@
+<!-- id=s07 duration=7 -->
+<style>
+  #s07 .lift { box-shadow: 0 30px 70px rgba(0,0,0,0.55); }
+  .s07-px { position: absolute; image-rendering: pixelated; }
+  #s07-world { left: 0; top: 0; }
+  .s07-font { font-family: "Press Start 2P", monospace; color: #f4f4f4; }
+  #s07-title { left: 0; right: 0; top: 230px; text-align: center; }
+  #s07-title span { display: block; font-size: 76px; line-height: 1.25; color: #ffcd75; text-shadow: 6px 6px 0 #b13e53, 12px 12px 0 #1a1c2c; }
+  #s07-shine { left: -200px; top: 220px; width: 90px; height: 220px; background: rgba(255,255,255,0.55); }
+  .s07-tag { position: absolute; font-size: 22px; color: #1a1c2c; background: #f4f4f4; padding: 8px 8px 6px; box-shadow: 0 6px 0 #94b0c2, 6px 0 0 #94b0c2, 6px 6px 0 #566c86; }
+  #s07-box { left: 60px; top: 1440px; width: 960px; height: 270px; background: #1a1c2c; border: 6px solid #f4f4f4; box-shadow: 0 0 0 6px #1a1c2c, 0 0 0 12px #566c86; padding: 40px 44px; }
+  #s07-box div { font-size: 34px; line-height: 1.7; }
+  #s07-cursor { position: absolute; right: 40px; bottom: 30px; width: 24px; height: 18px; background: #ffcd75; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+</style>
+<div id="s07-wrap" class="wrap">
+  <svg id="s07-world" class="abs" width="1080" height="1920" viewBox="0 0 180 320" shape-rendering="crispEdges">
+    <g id="s07-sky"></g>
+    <g id="s07-stars"></g>
+    <g id="s07-sun"></g>
+    <g id="s07-stall"></g>
+    <g id="s07-fruits"></g>
+    <g id="s07-coin"></g>
+  </svg>
+  <div id="s07-shine" class="abs"></div>
+  <div id="s07-title" class="abs s07-font"><span>SEASON</span><span>MARKET</span></div>
+  <div id="s07-tags"></div>
+  <div id="s07-box" class="abs s07-font"><div id="s07-line1"></div><div id="s07-line2" style="color: #a7f070"></div><span id="s07-cursor"></span></div>
+  <div id="s07-phone" class="phone" style="left: 305px; top: 456px">
+    <div class="screen"><img src="assets/screens/14-fruit-prices.png" alt="" /></div>
+    <div class="glare"></div>
+  </div>
+  <div id="s07-hole" class="hole"></div>
+  <div id="s07-lift" class="lift">
+    <img id="s07-p120" class="s07-px" src="assets/pixel/prices-120.png" alt="" style="left: 0; top: 0; width: 100%; height: 100%" />
+    <img id="s07-p60" class="s07-px" src="assets/pixel/prices-60.png" alt="" style="left: 0; top: 0; width: 100%; height: 100%" />
+    <img id="s07-p30" class="s07-px" src="assets/pixel/prices-30.png" alt="" style="left: 0; top: 0; width: 100%; height: 100%" />
+  </div>
+</div>
+<script>
+  var IMG = "assets/screens/14-fruit-prices.png";
+  lift($("#s07-lift"), 305, 456, IMG, 30, 560, 662, 750);
+  hole($("#s07-hole"), 305, 456, 30, 560, 662, 750);
+  var NS = "http://www.w3.org/2000/svg";
+  function rect(g, x, y, w, h, c) { var r = document.createElementNS(NS, "rect"); r.setAttribute("x", x); r.setAttribute("y", y); r.setAttribute("width", w); r.setAttribute("height", h); r.setAttribute("fill", c); g.appendChild(r); return r; }
+
+  // Sky: four bands, checkerboard dithering where they meet (no smooth gradients in 8-bit).
+  var sky = $("#s07-sky"), bands = ["#1a1c2c", "#29366f", "#3b5dc9", "#41a6f6"], edges = [0, 55, 105, 150, 232];
+  for (var b = 0; b < 4; b++) {
+    rect(sky, 0, edges[b], 180, edges[b + 1] - edges[b], bands[b]);
+    if (b < 3) for (var y = edges[b + 1] - 3; y < edges[b + 1] + 3; y++) for (var x = (y % 2); x < 180; x += 2) rect(sky, x, y, 1, 1, y < edges[b + 1] ? bands[b + 1] : bands[b]);
+  }
+  rect(sky, 0, 232, 180, 88, "#333c57");
+  for (var tx = 0; tx < 180; tx += 12) { rect(sky, tx, 232, 11, 1, "#566c86"); rect(sky, tx + 6, 244, 1, 76, "#29366f"); }
+  // Stars (fixed positions), twinkled by stepping opacity.
+  var STARS = [[12, 12], [40, 30], [70, 8], [104, 22], [150, 14], [166, 40], [24, 48], [130, 44], [88, 52]];
+  STARS.forEach(function (s, i) { var r = rect($("#s07-stars"), s[0], s[1], 1, 1, "#f4f4f4"); r.setAttribute("id", "s07-st" + i); });
+  // Pixel sun (circle by rows).
+  var SUN = ["..xxxx..", ".xxxxxx.", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", ".xxxxxx.", "..xxxx.."];
+  SUN.forEach(function (row, y) { for (var x = 0; x < 8; x++) if (row[x] === "x") rect($("#s07-sun"), 136 + x * 2, 100 + y * 2, 2, 2, y < 3 ? "#ffcd75" : "#ef7d57"); });
+  // Market stall: striped awning with scalloped edge, posts, counter.
+  var st = $("#s07-stall");
+  rect(st, 18, 136, 4, 96, "#5d275d"); rect(st, 158, 136, 4, 96, "#5d275d");
+  for (var ax = 12; ax < 168; ax += 8) { rect(st, ax, 118, 8, 18, (ax / 8) % 2 ? "#b13e53" : "#f4f4f4"); rect(st, ax + 2, 136, 4, 2, (ax / 8) % 2 ? "#b13e53" : "#f4f4f4"); }
+  rect(st, 12, 116, 156, 2, "#5d275d");
+  rect(st, 12, 194, 156, 4, "#d9a066"); rect(st, 12, 198, 156, 34, "#a7703a");
+  for (var px = 20; px < 160; px += 20) rect(st, px, 204, 12, 2, "#6b4226");
+  // Fruit sprites (10x10, drawn at 2 internal px per sprite px).
+  var PAL = { G: "#38b764", L: "#a7f070", d: "#257179", Y: "#ffcd75", y: "#d9a03a", k: "#333c57", O: "#ff9e3d", o: "#ffd39b", r: "#c25b1e", g: "#38b764", R: "#b13e53", p: "#ff8fa3", m: "#6d1f3a", C: "#a7703a", c: "#d9a066", b: "#6b4226" };
+  var SPR = {
+    guava: ["....dd....", "...dGGd...", "..GGLLGG..", ".GGLLGGGG.", ".GGLGGGGG.", ".GGGGGGGd.", ".GGGGGGdd.", "..GGGGdd..", "...dddd...", ".........."],
+    banana: ["........k.", ".......YY.", "......YYy.", ".....YYy..", "....YYYy..", "..YYYYy...", "YYYYYy....", ".yyyy.....", "..........", ".........."],
+    orange: ["....g.....", "...ggO....", "..OOOOOO..", ".OOoOOOOO.", ".OoOOOOOO.", ".OOOOOOOr.", ".OOOOOOrr.", "..OOOOrr..", "...rrrr...", ".........."],
+    pomegranate: ["....mm....", "...RmmR...", "..RRRRRR..", ".RRpRRRRR.", ".RpRRRRRR.", ".RRRRRRRm.", ".RRRRRRmm.", "..RRRRmm..", "...mmmm...", ".........."],
+    chikoo: ["..........", "....gg....", "..CCCCCC..", ".CCcCCCCC.", ".CcCCCCCC.", ".CCCCCCCb.", "..CCCCCbb.", "...bbbb...", "..........", ".........."],
+  };
+  var FRUITS = [["guava", 18, "Rs65"], ["banana", 48, "Rs23"], ["orange", 78, "Rs125"], ["pomegranate", 108, "Rs83"], ["chikoo", 138, "Rs35"]];
+  FRUITS.forEach(function (f, i) {
+    var g = document.createElementNS(NS, "g"); g.setAttribute("id", "s07-f" + i); $("#s07-fruits").appendChild(g);
+    SPR[f[0]].forEach(function (row, y) { for (var x = 0; x < 10; x++) if (PAL[row[x]]) rect(g, f[1] + x * 2, 174 + y * 2, 2, 2, PAL[row[x]]); });
+    var tag = document.createElement("div"); tag.className = "s07-tag s07-font"; tag.id = "s07-t" + i; tag.textContent = f[2];
+    tag.style.left = (f[1] * 6 + 60 - f[2].length * 11 - 8) + "px"; tag.style.top = (150 * 6) + "px"; $("#s07-tags").appendChild(tag);
+  });
+  // Spinning coin above the guava tag.
+  var COIN = [".yyyy.", "yYYYYy", "yYyYYy", "yYyYYy", "yYYYYy", ".yyyy."];
+  var coin = $("#s07-coin");
+  COIN.forEach(function (row, y) { for (var x = 0; x < 6; x++) if (PAL[row[x]]) rect(coin, 25 + x, 136 + y, 1, 1, PAL[row[x]]); });
+
+  // Opening: the price list lifts off the screen and pixelates into the 8-bit world.
+  tl.fromTo("#s07-wrap", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+  tl.set("#s07-world, #s07-title, #s07-tags, #s07-box, #s07-shine", { opacity: 0 }, 0);
+  tl.set("#s07-p120, #s07-p60, #s07-p30", { opacity: 0 }, 0);
+  tl.fromTo("#s07-hole", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.4);
+  tl.fromTo("#s07-lift", { z: 0, transformPerspective: 1600 }, { z: 200, duration: 0.45, ease: "expo.out" }, 0.4);
+  tl.to("#s07-phone, #s07-hole", { y: 1100, opacity: 0, duration: 0.7, ease: "power3.in" }, 0.85);
+  tl.set("#s07-p120", { opacity: 1 }, 1.0);
+  tl.set("#s07-p60", { opacity: 1 }, 1.15);
+  tl.set("#s07-p30", { opacity: 1 }, 1.3);
+  tl.set("#s07-world", { opacity: 1 }, 1.45);
+  tl.to("#s07-lift", { scale: 0, duration: 0.3, ease: "steps(4)" }, 1.45);
+  // Title drops in steps, then a shine sweeps across it.
+  tl.set("#s07-title", { opacity: 1 }, 1.7);
+  tl.fromTo("#s07-title", { y: -360 }, { y: 0, duration: 0.42, ease: "steps(6)" }, 1.7);
+  tl.set("#s07-shine", { opacity: 1 }, 2.3);
+  tl.fromTo("#s07-shine", { x: 0 }, { x: 1400, duration: 0.5, ease: "steps(10)" }, 2.3);
+  tl.set("#s07-shine", { opacity: 0 }, 2.8);
+  // Fruits hop onto the counter one by one; tags pop.
+  FRUITS.forEach(function (f, i) {
+    tl.fromTo("#s07-f" + i, { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "steps(4)" }, 1.95 + i * 0.13);
+    tl.fromTo("#s07-f" + i, { y: 0 }, { y: -4, duration: 0.25, ease: "steps(2)", yoyo: true, repeat: 7 }, 3.0 + i * 0.1);
+  });
+  tl.set("#s07-tags", { opacity: 1 }, 2.6);
+  tl.fromTo(".s07-tag", { scale: 0 }, { scale: 1, duration: 0.15, ease: "steps(3)", stagger: 0.08 }, 2.6);
+  tl.fromTo("#s07-coin", { scaleX: 1, transformOrigin: "28px 139px" }, { scaleX: 0.2, duration: 0.2, ease: "steps(3)", yoyo: true, repeat: 15 }, 2.8);
+  // Sun rises a few pixels at a time; stars twinkle.
+  tl.fromTo("#s07-sun", { y: 0 }, { y: -40, duration: 5.0, ease: "steps(20)" }, 1.5);
+  STARS.forEach(function (s, i) { tl.fromTo("#s07-st" + i, { opacity: 1 }, { opacity: 0.2, duration: 0.3, ease: "steps(1)", yoyo: true, repeat: 9 }, 1.5 + (i % 4) * 0.15); });
+  // Dialogue box opens and types.
+  tl.set("#s07-box", { opacity: 1 }, 3.1);
+  tl.fromTo("#s07-box", { scaleY: 0 }, { scaleY: 1, duration: 0.18, ease: "steps(3)" }, 3.1);
+  var L1 = "GUAVA Rs65/KG", L2 = "PEAK SEASON! +VIT C", ty = { n: 0 };
+  tl.to(ty, { n: L1.length + L2.length, duration: 1.6, ease: "none", onUpdate: function () {
+    var k = Math.floor(ty.n);
+    $("#s07-line1").textContent = L1.slice(0, Math.min(k, L1.length));
+    $("#s07-line2").textContent = k > L1.length ? L2.slice(0, k - L1.length) : "";
+  } }, 3.35);
+  tl.fromTo("#s07-cursor", { opacity: 1 }, { opacity: 0, duration: 0.25, ease: "steps(1)", yoyo: true, repeat: 5 }, 5.0);
+  tl.to("#s07-wrap", { opacity: 0, duration: 0.3, ease: "steps(3)" }, 6.65);
+</script>

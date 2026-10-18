@@ -1,0 +1,63 @@
+<!-- id=s01 duration=6 -->
+<style>
+  #s01-icon { left: 0; right: 0; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; }
+  #s01-icon-box { width: 150px; height: 150px; border-radius: 40px; background: linear-gradient(140deg, #7fd8d0, #2b8f88); box-shadow: 0 0 80px rgba(127,216,208,0.55); display: flex; align-items: center; justify-content: center; }
+  #s01 .lift { box-shadow: 0 50px 110px rgba(0,0,0,0.55), 0 0 0 1.5px rgba(255,255,255,0.22); }
+</style>
+<div id="s01-wrap" class="wrap">
+  <div class="head">
+    <span id="s01-eyebrow" class="eyebrow block">Meal Tracker</span>
+    <span id="s01-title" class="title block" style="margin-top: 22px">Your whole day, in one screen.</span>
+  </div>
+  <div id="s01-phone" class="phone" style="left: 305px; top: 456px">
+    <div class="screen">
+      <div id="s01-icon" class="abs"><div id="s01-icon-box">
+        <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="44" r="26" fill="none" stroke="#05211f" stroke-width="7" /><path d="M42 18 V44 L58 54" stroke="#05211f" stroke-width="7" fill="none" stroke-linecap="round" /></svg>
+      </div></div>
+      <img id="s01-screen" src="assets/screens/01-today-top.png" alt="" />
+    </div>
+    <div class="glare"></div>
+  </div>
+  <div id="s01-h1" class="hole"></div>
+  <div id="s01-h2" class="hole"></div>
+  <div id="s01-h3" class="hole"></div>
+  <div id="s01-l1" class="lift"></div>
+  <div id="s01-l2" class="lift"></div>
+  <div id="s01-l3" class="lift"></div>
+</div>
+<script>
+  var IMG = "assets/screens/01-today-top.png";
+  lift($("#s01-l1"), 305, 456, IMG, 30, 205, 660, 595);
+  lift($("#s01-l2"), 305, 456, IMG, 30, 850, 660, 250);
+  lift($("#s01-l3"), 305, 456, IMG, 30, 1135, 660, 270);
+  hole($("#s01-h1"), 305, 456, 30, 205, 660, 595);
+  hole($("#s01-h2"), 305, 456, 30, 850, 660, 250);
+  hole($("#s01-h3"), 305, 456, 30, 1135, 660, 270);
+  var E = "expo.out", S = "sine.inOut";
+
+  // Phone arrives and boots.
+  tl.fromTo("#s01-phone", { y: 1000, rotationX: 28, z: -300, transformPerspective: 2200 }, { y: 0, rotationX: 0, z: 0, duration: 1.4, ease: E }, 0);
+  tl.fromTo("#s01-icon-box", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.8)" }, 0.55);
+  tl.to("#s01-icon-box", { scale: 2.6, opacity: 0, duration: 0.55, ease: "power2.in" }, 1.35);
+  tl.fromTo("#s01-screen", { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "power3.inOut" }, 1.4);
+  tl.fromTo("#s01-l1, #s01-l2, #s01-l3", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.95);
+  tl.fromTo("#s01-h1", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.0);
+  tl.fromTo("#s01-h2", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.2);
+  tl.fromTo("#s01-h3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.4);
+
+  // UI cards lift off the screen into 3D space.
+  tl.fromTo("#s01-l1", { x: 0, y: 0, z: 0, rotationY: 0, transformPerspective: 1800 }, { x: -230, y: -40, z: 220, rotationY: 24, scale: 0.92, duration: 1.1, ease: E }, 2.0);
+  tl.fromTo("#s01-l2", { x: 0, y: 0, z: 0, rotationY: 0, transformPerspective: 1800 }, { x: 230, y: 60, z: 260, rotationY: -24, scale: 0.92, duration: 1.1, ease: E }, 2.2);
+  tl.fromTo("#s01-l3", { x: 0, y: 0, z: 0, rotationY: 0, transformPerspective: 1800 }, { x: -220, y: 250, z: 180, rotationY: 20, scale: 0.92, duration: 1.1, ease: E }, 2.4);
+  // Idle float.
+  tl.to("#s01-l1", { y: -60, duration: 2.4, ease: S }, 3.1);
+  tl.to("#s01-l2", { y: 30, duration: 2.4, ease: S }, 3.3);
+  tl.to("#s01-l3", { y: 220, duration: 2.4, ease: S }, 3.5);
+
+  // Title: slow, opacity + small rise (aurora style).
+  tl.fromTo("#s01-eyebrow", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9, ease: S }, 2.6);
+  tl.fromTo("#s01-title", { opacity: 0, y: 12, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.0, ease: S }, 2.8);
+
+  // Hand-off: camera pushes in and the scene dissolves.
+  tl.to("#s01-wrap", { scale: 1.12, opacity: 0, duration: 0.6, ease: "power2.in" }, 5.4);
+</script>

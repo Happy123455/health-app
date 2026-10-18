@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Meal Tracker — showcase</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MorphSVGPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/DrawSVGPlugin.min.js"></script>
+    <script>gsap.registerPlugin(MorphSVGPlugin, DrawSVGPlugin);</script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #04080a; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      /* Aurora: large blurred colour fields drifting slowly (the glass scenes sit on this). */
+      .blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+      #grain { position: absolute; inset: 0; opacity: 0.045; background-image: repeating-radial-gradient(circle at 37% 41%, #fff 0 1px, transparent 1px 3px); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="58" data-width="1080" data-height="1920">
+      <div id="aurora" class="clip" data-start="0" data-duration="58" data-track-index="0">
+        <div id="b1" class="blob" style="left: -120px; top: 300px; width: 760px; height: 760px; background: rgba(46, 180, 170, 0.55)"></div>
+        <div id="b2" class="blob" style="left: 520px; top: 760px; width: 700px; height: 700px; background: rgba(40, 120, 200, 0.45)"></div>
+        <div id="b3" class="blob" style="left: 160px; top: 1260px; width: 640px; height: 640px; background: rgba(120, 90, 210, 0.35)"></div>
+        <div id="b4" class="blob" style="left: 600px; top: -80px; width: 560px; height: 560px; background: rgba(60, 200, 190, 0.30)"></div>
+        <div id="grain"></div>
+      </div>
+      <!-- scenes:start -->
+      <div id="s01" data-composition-id="s01" data-composition-src="compositions/s01-boot.html" data-start="0.0" data-duration="6" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s02" data-composition-id="s02" data-composition-src="compositions/s02-lineart.html" data-start="5.6" data-duration="7" data-track-index="2" data-width="1080" data-height="1920"></div>
+      <div id="s03" data-composition-id="s03" data-composition-src="compositions/s03-liquid.html" data-start="12.2" data-duration="7" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s04" data-composition-id="s04" data-composition-src="compositions/s04-morph.html" data-start="18.8" data-duration="7" data-track-index="2" data-width="1080" data-height="1920"></div>
+      <div id="s05" data-composition-id="s05" data-composition-src="compositions/s05-iso.html" data-start="25.4" data-duration="7" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s06" data-composition-id="s06" data-composition-src="compositions/s06-sticker.html" data-start="32.0" data-duration="7" data-track-index="2" data-width="1080" data-height="1920"></div>
+      <div id="s07" data-composition-id="s07" data-composition-src="compositions/s07-pixel.html" data-start="38.6" data-duration="7" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s08" data-composition-id="s08" data-composition-src="compositions/s08-watch.html" data-start="45.2" data-duration="6.4" data-track-index="2" data-width="1080" data-height="1920"></div>
+      <div id="s09" data-composition-id="s09" data-composition-src="compositions/s09-outro.html" data-start="51.2" data-duration="6.8" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <!-- scenes:end -->
+      <audio id="el-bgm" src="assets/audio/showcase.m4a" data-start="0" data-duration="58" data-track-index="9" data-volume="1"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#b1", { x: 0, y: 0 }, { x: 260, y: -180, duration: 58, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b2", { x: 0, y: 0 }, { x: -300, y: 160, duration: 58, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b3", { x: 0, y: 0 }, { x: 220, y: -260, duration: 58, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b4", { x: 0, y: 0 }, { x: -260, y: 220, duration: 58, ease: "sine.inOut" }, 0);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

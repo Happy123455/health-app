@@ -1,0 +1,163 @@
+<!doctype html>
+<html><head><meta charset="UTF-8" /></head><body>
+<template>
+<style>
+@font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 900; src: url("assets/fonts/inter-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Press Start 2P"; font-weight: 400; src: url("assets/fonts/press-start-2p-latin-400-normal.woff2") format("woff2"); }
+.abs { position: absolute; }
+.block { display: block; }
+.wrap { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: #f1f6f5; }
+.eyebrow { font-weight: 600; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; color: #7fd8d0; }
+.title { font-weight: 700; font-size: 92px; line-height: 1.02; letter-spacing: -0.035em; color: #f1f6f5; }
+.sub { font-weight: 400; font-size: 36px; line-height: 1.35; color: #93a3a1; }
+.head { position: absolute; left: 70px; right: 70px; top: 170px; text-align: center; }
+.phone { position: absolute; width: 470px; height: 1008px; border-radius: 52px; padding: 13px; background: linear-gradient(145deg, #3b4144, #121516 40%, #2a2f31); box-shadow: 0 70px 140px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.06) inset; }
+.screen { position: relative; width: 100%; height: 100%; border-radius: 40px; overflow: hidden; background: #0f1213; }
+.screen img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; }
+.glare { position: absolute; inset: 13px; border-radius: 40px; background: linear-gradient(115deg, rgba(255,255,255,0.14), rgba(255,255,255,0) 38%); pointer-events: none; }
+.lift { position: absolute; background-repeat: no-repeat; border-radius: 18px; }
+.glass { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.22); border-radius: 36px; box-shadow: 0 40px 100px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); backdrop-filter: blur(28px); }
+.chip { display: inline-flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; background: rgba(20,30,32,0.75); border: 1.5px solid rgba(255,255,255,0.14); font-weight: 600; font-size: 30px; color: #f1f6f5; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: #7fd8d0; }
+.hole { position: absolute; border-radius: 18px; background: #0b0e0f; box-shadow: inset 0 0 0 1.5px rgba(127,216,208,0.35), inset 0 0 40px rgba(127,216,208,0.12); }
+
+#s04 { position: absolute; inset: 0; overflow: hidden; }
+
+  #s04 .lift { box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+  #s04-cam { left: 0; top: 0; width: 1080px; height: 1920px; perspective: 2200px; perspective-origin: 50% 62%; }
+  #s04-stack { left: 0; top: 0; width: 1080px; height: 1920px; transform-style: preserve-3d; }
+  .s04-layer { position: absolute; left: 0; top: 0; }
+  .s04-mark { position: absolute; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 28px; color: #f1f6f5; white-space: nowrap; }
+  .s04-mark i { width: 22px; height: 22px; border-radius: 50%; border: 4px solid currentColor; background: #0b1113; display: block; }
+  .s04-axis { position: absolute; top: 1404px; font-weight: 500; font-size: 24px; color: #6f807e; }
+
+</style>
+<div id="s04" data-composition-id="s04" data-width="1080" data-height="1920" data-duration="7">
+<div id="s04-wrap" class="wrap">
+  <div class="head">
+    <span id="s04-eyebrow" class="eyebrow block">Fuel &amp; digestion forecast</span>
+    <span id="s04-title" class="title block" style="margin-top: 22px">See the next 24 hours.</span>
+  </div>
+  <div id="s04-phone" class="phone" style="left: 305px; top: 456px">
+    <div class="screen"><img src="assets/screens/07-timeline.png" alt="" /></div>
+    <div class="glare"></div>
+  </div>
+  <div id="s04-hole" class="hole"></div>
+  <div id="s04-lift" class="lift"></div>
+  <div id="s04-cam" class="abs">
+    <div id="s04-stack" class="abs">
+      <svg id="s04-L2" class="s04-layer" width="1080" height="1920" viewBox="0 0 1080 1920">
+        <path id="s04-muscle" d="" fill="rgba(185,198,255,0.16)" stroke="#b9c6ff" stroke-width="5" stroke-dasharray="4 14" stroke-linecap="round" opacity="0" />
+      </svg>
+      <svg id="s04-L1" class="s04-layer" width="1080" height="1920" viewBox="0 0 1080 1920">
+        <defs><linearGradient id="s04-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd8d0" stop-opacity="0.95" /><stop offset="1" stop-color="#7fd8d0" stop-opacity="0.15" /></linearGradient></defs>
+        <line x1="90" y1="1380" x2="990" y2="1380" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+        <path id="s04-shape" d="M540,890 C622.8,890 690,957.2 690,1040 C690,1122.8 622.8,1190 540,1190 C457.2,1190 390,1122.8 390,1040 C390,957.2 457.2,890 540,890 Z" fill="url(#s04-g)" />
+      </svg>
+      <svg id="s04-L3" class="s04-layer" width="1080" height="1920" viewBox="0 0 1080 1920">
+        <path id="s04-stomach" d="" fill="rgba(255,176,92,0.32)" stroke="#ffb05c" stroke-width="4" opacity="0" />
+      </svg>
+      <div id="s04-m1" class="s04-mark" style="left: 560px; top: 1312px; color: #ff6b6b"><i></i>12:00 · fuel crash</div>
+      <div id="s04-m2" class="s04-mark" style="left: 172px; top: 1290px; color: #ffb05c"><i></i>00:52 · stomach empty</div>
+      <div id="s04-m3" class="s04-mark" style="left: 640px; top: 1060px; color: #b9c6ff"><i></i>14:30 · usual lunch</div>
+    </div>
+  </div>
+  <span id="s04-a1" class="s04-axis" style="left: 80px">Now</span>
+  <span id="s04-a2" class="s04-axis" style="left: 505px">10:00</span>
+  <span id="s04-a3" class="s04-axis" style="left: 920px">22:00</span>
+</div>
+</div>
+<script>
+(function () {
+// Screen-space helpers. Screenshots are 720 px wide; the phone screen is 444 px wide.
+var K = 444 / 720;
+function lift(el, phoneLeft, phoneTop, img, x, y, w, h) {
+  el.style.left = (phoneLeft + 13 + x * K) + "px";
+  el.style.top = (phoneTop + 13 + y * K) + "px";
+  el.style.width = (w * K) + "px";
+  el.style.height = (h * K) + "px";
+  el.style.backgroundImage = "url(" + img + ")";
+  el.style.backgroundSize = (720 * K) + "px auto";
+  el.style.backgroundPosition = (-x * K) + "px " + (-y * K) + "px";
+}
+function $(s) { return document.querySelector(s); }
+// The slot a lifted card leaves behind on the screen: dark, with a faint teal rim.
+function hole(el, phoneLeft, phoneTop, x, y, w, h) {
+  el.style.left = (phoneLeft + 13 + x * K) + "px";
+  el.style.top = (phoneTop + 13 + y * K) + "px";
+  el.style.width = (w * K) + "px";
+  el.style.height = (h * K) + "px";
+}
+
+var tl = gsap.timeline({ paused: true });
+
+  var IMG = "assets/screens/07-timeline.png";
+  lift($("#s04-lift"), 305, 456, IMG, 28, 466, 664, 614);
+  hole($("#s04-hole"), 305, 456, 28, 466, 664, 614);
+
+  // Chart geometry: 24 h across x 90..990, value 0..1 up from y 1380 (420 px tall).
+  function X(h) { return 90 + h / 24 * 900; }
+  function Y(v) { return 1380 - v * 420; }
+  function interp(pts, h) {
+    for (var i = 1; i < pts.length; i++) if (h <= pts[i][0]) {
+      var a = pts[i - 1], b = pts[i], t = (h - a[0]) / (b[0] - a[0]);
+      t = t * t * (3 - 2 * t);
+      return a[1] + (b[1] - a[1]) * t;
+    }
+    return pts[pts.length - 1][1];
+  }
+  function area(pts) {
+    var d = "M90,1380";
+    for (var h = 0; h <= 24.001; h += 0.25) d += " L" + X(h).toFixed(1) + "," + Y(interp(pts, h)).toFixed(1);
+    return d + " L990,1380 Z";
+  }
+  function line(pts) {
+    var d = "";
+    for (var h = 0; h <= 24.001; h += 0.25) d += (h ? " L" : "M") + X(h).toFixed(1) + "," + Y(interp(pts, h)).toFixed(1);
+    return d;
+  }
+  // Forecast from 22:00: quick fuel drains overnight to empty by ~12:00, lunch at 14:30, dinner at 20:30.
+  var QUICK = [[0, 0.45], [1, 0.6], [4, 0.42], [8, 0.2], [12, 0.03], [14, 0], [16.5, 0], [18, 0.38], [20, 0.44], [22.5, 0.24], [24, 0.42]];
+  var STOMACH = [[0, 0.82], [2.9, 0], [16.5, 0], [16.7, 0.62], [19.6, 0], [22.5, 0], [22.7, 0.7], [24, 0.5]];
+  var MUSCLE = [[0, 0.84], [12, 0.8], [20.9, 0.79], [21.4, 0.68], [24, 0.74]];
+  var WAVE = "M90,1380";
+  for (var x = 90; x <= 990; x += 15) WAVE += " L" + x + "," + (1170 + Math.sin((x - 90) / 900 * Math.PI * 4) * 110).toFixed(1);
+  WAVE += " L990,1380 Z";
+  $("#s04-stomach").setAttribute("d", area(STOMACH));
+  $("#s04-muscle").setAttribute("d", line(MUSCLE));
+
+  tl.fromTo("#s04-wrap", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+  tl.fromTo("#s04-eyebrow, #s04-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.1 }, 0.3);
+  // Chart lifts out and enlarges, then gives way to pure shapes.
+  tl.fromTo("#s04-hole", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.45);
+  tl.fromTo("#s04-lift", { z: 0, transformPerspective: 1600 }, { z: 220, duration: 0.5, ease: "expo.out" }, 0.45);
+  tl.to("#s04-lift", { y: 94, scale: 2.3, z: 0, duration: 0.8, ease: "expo.inOut" }, 0.9);
+  tl.to("#s04-phone, #s04-hole", { y: 1100, opacity: 0, duration: 0.8, ease: "power3.in" }, 0.9);
+  tl.to("#s04-lift", { opacity: 0, scale: 2.2, duration: 0.4 }, 1.6);
+  tl.set("#s04-shape", { opacity: 0 }, 0);
+  // Morph chain: disc → wave → forecast area.
+  tl.fromTo("#s04-shape", { opacity: 0, scale: 0.2, transformOrigin: "540px 1040px" }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.8)" }, 1.7);
+  tl.to("#s04-shape", { morphSVG: WAVE, duration: 0.7, ease: "power3.inOut" }, 2.3);
+  tl.to("#s04-shape", { morphSVG: area(QUICK), duration: 0.75, ease: "power3.inOut" }, 3.0);
+  tl.fromTo(".s04-axis", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 3.4);
+  // The three series step out into depth.
+  tl.to("#s04-stomach, #s04-muscle", { opacity: 1, duration: 0.4 }, 3.7);
+  tl.fromTo("#s04-stack", { rotationY: 0, rotationX: 0 }, { rotationY: -13, rotationX: 9, duration: 1.0, ease: "power3.inOut" }, 3.7);
+  tl.fromTo("#s04-L2", { z: 0 }, { z: -150, duration: 1.0, ease: "power3.inOut" }, 3.7);
+  tl.fromTo("#s04-L3", { z: 0 }, { z: 140, duration: 1.0, ease: "power3.inOut" }, 3.7);
+  tl.fromTo("#s04-m2", { opacity: 0, z: 140 }, { opacity: 1, z: 140, duration: 0.4 }, 4.5);
+  tl.fromTo("#s04-m1", { opacity: 0, x: -20, z: 160 }, { opacity: 1, x: 0, z: 160, duration: 0.4 }, 4.75);
+  tl.fromTo("#s04-m3", { opacity: 0, z: -150 }, { opacity: 1, z: -150, duration: 0.4 }, 5.0);
+  tl.to("#s04-stack", { rotationY: -9, rotationX: 6, duration: 1.4, ease: "sine.inOut" }, 4.8);
+  tl.to("#s04-wrap", { opacity: 0, duration: 0.4 }, 6.6);
+
+window.__timelines["s04"] = tl;
+})();
+</script>
+</template>
+</body></html>
