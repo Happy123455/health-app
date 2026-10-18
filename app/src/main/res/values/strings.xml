@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Meal Tracker</string>
+    <string name="log_meal">Log meal</string>
+    <string name="share_label">Analyse meal</string>
+</resources>
