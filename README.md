@@ -1,5 +1,7 @@
 # Meal Tracker
 
+**Promo:** [docs/promo.mp4](docs/promo.mp4), a 60-second 3 AM infomercial about the app (made with HyperFrames; source in [promo-video/](promo-video/), soundtrack synthesized by `promo-video/scripts/synth.py`).
+
 A personal Android app for the Galaxy S23 Ultra. Take a photo of a meal and the rest is automatic:
 
 1. A new photo lands in the **Meals** album, via the "Log meal" icon, the Gallery or the share sheet.

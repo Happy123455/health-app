@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Meal Tracker — 3 AM Infomercial</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 900; src: url("assets/fonts/inter-latin-900-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #FFFDF5; font-family: "Inter", sans-serif; color: #000; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+
+      /* grounds: the pastel cycle */
+      .g-pink { background: #FE90E8; } .g-blue { background: #C0F7FE; } .g-green { background: #99E885; }
+      .g-yellow { background: #F7CB46; } .g-cream { background: #FFDC8B; } .g-black { background: #000; }
+      .dots { position: absolute; inset: 0; background-image: radial-gradient(#000 1.6px, transparent 1.7px); background-size: 30px 30px; opacity: 0.13; }
+      .stripes { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #000 0 26px, transparent 26px 64px); opacity: 0.12; }
+
+      /* type */
+      .h { font-weight: 900; text-transform: uppercase; letter-spacing: -0.035em; line-height: 0.9; }
+      .h-xxl { font-size: 250px; } .h-xl { font-size: 150px; } .h-l { font-size: 112px; } .h-m { font-size: 84px; } .h-s { font-size: 60px; }
+      .body { font-weight: 500; font-size: 40px; line-height: 1.3; }
+      .label { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 32px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .block { display: block; }
+      .abs { position: absolute; }
+
+      /* atoms */
+      .pill { display: inline-block; padding: 14px 32px; border: 5px solid #000; border-radius: 9999px; box-shadow: 7px 7px 0 #000; background: #fff; }
+      .card { background: #fff; border: 6px solid #000; box-shadow: 14px 14px 0 #000; padding: 36px 40px; }
+      .sticker { border: 6px solid #000; box-shadow: 10px 10px 0 #000; padding: 22px 30px; }
+      .phone { position: absolute; width: 520px; height: 1115px; border: 10px solid #000; border-radius: 58px; background: #000; overflow: hidden; box-shadow: 18px 18px 0 #000; }
+      .phone img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; }
+      .zoom { position: absolute; border: 8px solid #000; box-shadow: 16px 16px 0 #000; overflow: hidden; background: #191c1e; }
+      .zoom img { position: absolute; left: 0; display: block; }
+      .burst { position: absolute; display: flex; align-items: center; justify-content: center; text-align: center; }
+      .burst .bk, .burst .fg { position: absolute; inset: 0; clip-path: polygon(50% 0%, 61% 15%, 79% 9%, 79% 28%, 98% 35%, 86% 50%, 98% 65%, 79% 72%, 79% 91%, 61% 85%, 50% 100%, 39% 85%, 21% 91%, 21% 72%, 2% 65%, 14% 50%, 2% 35%, 21% 28%, 21% 9%, 39% 15%); }
+      .burst .bk { background: #000; }
+      .burst .fg { inset: 9px; }
+      .burst .txt { position: relative; font-weight: 900; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em; }
+      .center-col { position: absolute; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+      /* infomercial chrome */
+      #chrome { pointer-events: none; }
+      #live { position: absolute; left: 36px; top: 40px; display: flex; align-items: center; gap: 14px; background: #000; color: #fff; border: 4px solid #fff; padding: 10px 22px; }
+      #live-dot { width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
+      #chan { position: absolute; right: 36px; top: 40px; background: #fff; border: 4px solid #000; box-shadow: 6px 6px 0 #000; padding: 10px 20px; }
+      #ticker { position: absolute; left: 0; right: 0; bottom: 0; height: 104px; background: #000; border-top: 6px solid #F7CB46; overflow: hidden; }
+      #ticker-track { position: absolute; top: 22px; left: 0; white-space: nowrap; color: #F7CB46; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 46px; letter-spacing: 0.04em; }
+
+      /* F1 static */
+      #f01-static { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, #222 0 3px, #ddd 3px 5px, #555 5px 9px, #fff 9px 10px, #111 10px 14px); }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-v63y" id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1080" data-height="1920">
+
+      <!-- ===== F1 Cold open 0-4 ===== -->
+      <section data-hf-id="hf-waro" id="f01" class="clip g-pink" data-start="0" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-zx1w" class="dots"></div>
+        <div data-hf-id="hf-etwd" class="center-col" style="top: 330px">
+          <span data-hf-id="hf-jial" id="f01-w1" class="h h-xxl block">ARE</span>
+          <span data-hf-id="hf-jzzd" id="f01-w2" class="h h-xxl block">YOU</span>
+          <span data-hf-id="hf-azaf" id="f01-w3" class="h h-xxl block">TIRED</span>
+          <span data-hf-id="hf-2h4t" id="f01-w4" class="h h-xxl block">OF...</span>
+        </div>
+        <div data-hf-id="hf-lrx0" class="center-col" style="top: 1460px">
+          <span data-hf-id="hf-pmnj" id="f01-aside" class="pill label">(asked nobody, at 3:07 AM)</span>
+        </div>
+        <div data-hf-id="hf-og93" id="f01-static"></div>
+      </section>
+
+      <!-- ===== F2 Problems 4-9 ===== -->
+      <section data-hf-id="hf-7mjw" id="f02" class="clip g-blue" data-start="4" data-duration="5" data-track-index="1">
+        <div data-hf-id="hf-2trg" class="dots"></div>
+        <div data-hf-id="hf-s4vd" class="center-col" style="top: 190px"><span data-hf-id="hf-j11y" id="f02-pill" class="pill label" style="background:#FE90E8">Symptoms include</span></div>
+        <div data-hf-id="hf-gs2n" id="f02-c1" class="card abs" style="left: 70px; top: 330px; width: 940px">
+          <span data-hf-id="hf-ielv" class="h h-s block">Guessing what's in your thali</span>
+          <span data-hf-id="hf-hddi" class="body block" style="margin-top: 16px">Is that 400 kcal or 4,000? Nobody knows. Not even the thali.</span>
+        </div>
+        <div data-hf-id="hf-zgk7" id="f02-c2" class="card abs" style="left: 70px; top: 790px; width: 940px; background: #FFDC8B">
+          <span data-hf-id="hf-44kf" class="h h-s block">Forgetting lunch exists</span>
+          <span data-hf-id="hf-jop8" class="body block" style="margin-top: 16px">Your liver noticed. Your liver is upset.</span>
+        </div>
+        <div data-hf-id="hf-gq7x" id="f02-c3" class="card abs" style="left: 70px; top: 1230px; width: 940px; background: #99E885">
+          <span data-hf-id="hf-k0pv" class="h h-s block">Your stomach left you on read</span>
+          <span data-hf-id="hf-dneh" class="body block" style="margin-top: 16px">No ETA. No updates. Rude.</span>
+        </div>
+      </section>
+
+      <!-- ===== F3 Introducing 9-12 ===== -->
+      <section data-hf-id="hf-jup2" id="f03" class="clip g-yellow" data-start="9" data-duration="3" data-track-index="1">
+        <div data-hf-id="hf-6l16" class="stripes"></div>
+        <div data-hf-id="hf-qwal" class="center-col" style="top: 150px">
+          <span data-hf-id="hf-80ii" id="f03-intro" class="pill label">Introducing</span>
+          <span data-hf-id="hf-0rly" id="f03-t1" class="h h-xl block" style="margin-top: 30px">MEAL</span>
+          <span data-hf-id="hf-0h3j" id="f03-t2" class="h h-xl block">TRACKER™</span>
+        </div>
+        <div data-hf-id="hf-mmk8" id="f03-phone" class="phone" style="left: 280px; top: 690px"><img data-hf-id="hf-p2gy" src="assets/screens/01-today-top.png" alt="" /></div>
+        <div data-hf-id="hf-o4x0" id="f03-burst" class="burst" style="left: 700px; top: 560px; width: 360px; height: 360px">
+          <div data-hf-id="hf-i5rx" class="bk"></div><div data-hf-id="hf-w2ph" class="fg" style="background:#FE90E8"></div>
+          <span data-hf-id="hf-cwp1" class="txt" style="font-size: 40px; width: 230px">As seen on your own phone</span>
+        </div>
+      </section>
+
+      <!-- ===== F4 Snap + AI 12-16.5 ===== -->
+      <section data-hf-id="hf-tbju" id="f04" class="clip g-green" data-start="12" data-duration="4.5" data-track-index="1">
+        <div data-hf-id="hf-1mud" class="dots"></div>
+        <div data-hf-id="hf-chj9" class="abs" style="left: 60px; top: 150px">
+          <span data-hf-id="hf-41y7" id="f04-pill" class="pill label">Step 1</span>
+          <span data-hf-id="hf-545v" id="f04-h" class="h h-l block" style="margin-top: 26px">Take one photo.</span>
+        </div>
+        <div data-hf-id="hf-96vm" id="f04-phone" class="phone" style="left: 50px; top: 470px"><img data-hf-id="hf-84g7" src="assets/screens/15-meal.png" alt="" /></div>
+        <div data-hf-id="hf-sjvp" id="f04-s1" class="sticker abs" style="left: 560px; top: 640px; width: 470px; background: #FE90E8">
+          <span data-hf-id="hf-senf" class="label block">Gemini says</span>
+          <span data-hf-id="hf-t06k" class="h h-m block">904 KCAL</span>
+        </div>
+        <div data-hf-id="hf-glpr" id="f04-s2" class="sticker abs" style="left: 540px; top: 960px; width: 500px; background: #FFDC8B">
+          <span data-hf-id="hf-0buy" class="h h-s block">Churma: 6/10</span>
+          <span data-hf-id="hf-sdz3" class="body block" style="font-weight: 700">We saw that.</span>
+        </div>
+        <div data-hf-id="hf-naef" id="f04-cap" class="card abs" style="left: 600px; top: 1330px; width: 420px; padding: 26px 30px">
+          <span data-hf-id="hf-m2mp" class="body block">It does the maths. You do the eating.</span>
+        </div>
+      </section>
+
+      <!-- ===== F5 Samsung Health 16.5-20 ===== -->
+      <section data-hf-id="hf-2kx8" id="f05" class="clip g-cream" data-start="16.5" data-duration="3.5" data-track-index="1">
+        <div data-hf-id="hf-215e" class="dots"></div>
+        <div data-hf-id="hf-lnv5" class="center-col" style="top: 150px">
+          <span data-hf-id="hf-yxut" id="f05-h1" class="h h-l block">Syncs to</span>
+          <span data-hf-id="hf-y6fl" id="f05-h2" class="h h-l block">Samsung Health*</span>
+        </div>
+        <div data-hf-id="hf-pu7i" id="f05-phone" class="phone" style="left: 280px; top: 470px"><img data-hf-id="hf-1z0y" src="assets/screens/03-today-more.png" alt="" /></div>
+        <div data-hf-id="hf-9500" id="f05-chip" class="sticker abs" style="left: 600px; top: 640px; background: #99E885">
+          <span data-hf-id="hf-evej" class="h h-s block">1,408 KCAL ✓</span>
+        </div>
+        <div data-hf-id="hf-0izo" id="f05-foot" class="card abs" style="left: 60px; top: 1500px; width: 960px; padding: 24px 32px">
+          <span data-hf-id="hf-qhck" class="body block">*whenever Samsung Health wakes up. We checked. It's fine.</span>
+        </div>
+      </section>
+
+      <!-- ===== F6 Battery 20-24 ===== -->
+      <section data-hf-id="hf-1dah" id="f06" class="clip g-pink" data-start="20" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-40oj" class="dots"></div>
+        <div data-hf-id="hf-3qc9" class="abs" style="left: 60px; top: 150px">
+          <span data-hf-id="hf-jjtw" id="f06-h1" class="h h-l block">Your body.</span>
+          <span data-hf-id="hf-6ukq" id="f06-h2" class="h block" style="margin-top: 14px; font-size: 70px">Now with a battery %.</span>
+        </div>
+        <div data-hf-id="hf-ffhd" id="f06-phone" class="phone" style="left: 40px; top: 520px"><img data-hf-id="hf-ghi6" src="assets/screens/06-energy.png" alt="" /></div>
+        <div data-hf-id="hf-t6rt" id="f06-num-wrap" class="card abs" style="left: 600px; top: 640px; width: 440px; text-align: center; background: #F7CB46">
+          <span data-hf-id="hf-mwz2" class="label block">Energy</span>
+          <span data-hf-id="hf-vfun" id="f06-num" class="h block" style="font-size: 170px">0%</span>
+        </div>
+        <div data-hf-id="hf-3949" id="f06-s1" class="sticker abs" style="left: 590px; top: 1060px; width: 450px; background: #C0F7FE">
+          <span data-hf-id="hf-tfec" class="h h-s block">Low battery?</span>
+          <span data-hf-id="hf-3rsp" class="body block" style="font-weight: 700">Eat a roti. That's the patch notes.</span>
+        </div>
+      </section>
+
+      <!-- ===== F7 BUT WAIT 24-25.5 ===== -->
+      <section data-hf-id="hf-6pr6" id="f07" class="clip g-yellow" data-start="24" data-duration="1.5" data-track-index="1">
+        <div data-hf-id="hf-753y" class="stripes"></div>
+        <div data-hf-id="hf-4gp6" id="f07-burst" class="burst" style="left: 40px; top: 460px; width: 1000px; height: 1000px">
+          <div data-hf-id="hf-rzkh" class="bk"></div><div data-hf-id="hf-i489" class="fg" style="background:#FE90E8"></div>
+        </div>
+        <div data-hf-id="hf-039i" id="f07-text" class="center-col" style="top: 640px">
+          <span data-hf-id="hf-9hbf" class="h block" style="font-size: 230px">BUT</span>
+          <span data-hf-id="hf-31i5" class="h block" style="font-size: 230px">WAIT</span>
+          <span data-hf-id="hf-dhqw" class="pill h h-s" style="margin-top: 20px">There's more!</span>
+        </div>
+      </section>
+
+      <!-- ===== F8 Timeline 25.5-30.5 ===== -->
+      <section data-hf-id="hf-ngnc" id="f08" class="clip g-blue" data-start="25.5" data-duration="5" data-track-index="1">
+        <div data-hf-id="hf-4ezk" class="dots"></div>
+        <div data-hf-id="hf-4x9c" class="abs" style="left: 60px; top: 150px">
+          <span data-hf-id="hf-o9xt" id="f08-pill" class="pill label">Fuel & digestion · 48 h</span>
+          <span data-hf-id="hf-6xo1" id="f08-h" class="h h-l block" style="margin-top: 26px">It predicts the future.</span>
+        </div>
+        <div data-hf-id="hf-oqik" id="f08-zoom" class="zoom" style="left: 40px; top: 560px; width: 1000px; height: 830px">
+          <img data-hf-id="hf-oisq" id="f08-a" src="assets/screens/07-timeline.png" alt="" style="width: 1000px; top: -640px" />
+          <img data-hf-id="hf-eq08" id="f08-b" src="assets/screens/08-forecast.png" alt="" style="width: 1000px; top: -640px" />
+        </div>
+        <div data-hf-id="hf-hoj4" id="f08-s1" class="sticker abs" style="left: 60px; top: 1430px; width: 560px; background: #FE90E8">
+          <span data-hf-id="hf-qajb" class="h h-s block">12:00</span>
+          <span data-hf-id="hf-vlws" class="body block" style="font-weight: 700">Fuel crash incoming ⚠</span>
+        </div>
+        <div data-hf-id="hf-r5rr" id="f08-s2" class="sticker abs" style="left: 560px; top: 1500px; width: 480px; background: #FFDC8B">
+          <span data-hf-id="hf-xt3w" class="body block" style="font-weight: 700">Khichdi leaves stomach</span>
+          <span data-hf-id="hf-omlh" class="h h-s block">00:52 ✈</span>
+        </div>
+      </section>
+
+      <!-- ===== F9 Muscles 30.5-34.5 ===== -->
+      <section data-hf-id="hf-yrkz" id="f09" class="clip g-green" data-start="30.5" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-382h" class="dots"></div>
+        <div data-hf-id="hf-mus8" class="center-col" style="top: 150px">
+          <span data-hf-id="hf-aw8r" id="f09-h1" class="h h-l block">Leg day?</span>
+          <span data-hf-id="hf-5qxs" id="f09-h2" class="h h-m block" style="margin-top: 10px">It knows.</span>
+        </div>
+        <div data-hf-id="hf-dhra" id="f09-h3wrap" class="center-col" style="top: 150px">
+          <span data-hf-id="hf-wvjm" id="f09-h3" class="h h-l block">Desk day?</span>
+          <span data-hf-id="hf-uhfm" id="f09-h4" class="h h-m block" style="margin-top: 10px">It <u data-hf-id="hf-ozxf">really</u> knows.</span>
+        </div>
+        <div data-hf-id="hf-usnu" id="f09-phone" class="phone" style="left: 280px; top: 470px">
+          <img data-hf-id="hf-s4a2" id="f09-front" src="assets/screens/09-muscles.png" alt="" />
+          <img data-hf-id="hf-v9c0" id="f09-back" src="assets/screens/10-muscles-back.png" alt="" />
+        </div>
+      </section>
+
+      <!-- ===== F10 WANTED: CHAI 34.5-38.5 ===== -->
+      <section data-hf-id="hf-ysve" id="f10" class="clip g-cream" data-start="34.5" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-3mdi" class="dots"></div>
+        <div data-hf-id="hf-vjjf" id="f10-poster" class="card abs" style="left: 150px; top: 150px; width: 780px; background: #FFFDF5; text-align: center; padding: 34px">
+          <span data-hf-id="hf-b9pa" class="h block" style="font-size: 150px">WANTED</span>
+          <span data-hf-id="hf-oclm" class="block" style="font-size: 230px; line-height: 1.1">☕</span>
+          <span data-hf-id="hf-whii" class="h h-l block">CHAI</span>
+          <span data-hf-id="hf-2mp0" class="label block" style="margin-top: 14px">For stealing your iron</span>
+          <span data-hf-id="hf-vagi" class="body block" style="margin-top: 10px; font-weight: 700">Reward: one lemon 🍋</span>
+        </div>
+        <div data-hf-id="hf-24qd" id="f10-zoom" class="zoom" style="left: 40px; top: 1130px; width: 1000px; height: 470px">
+          <img data-hf-id="hf-329t" src="assets/screens/16-pairing.png" alt="" style="width: 1000px; top: -95px" />
+        </div>
+        <div data-hf-id="hf-uchz" id="f10-stamp" class="sticker abs" style="left: 500px; top: 1020px; width: 520px; background: #FE90E8; text-align: center">
+          <span data-hf-id="hf-57lq" class="h h-s block">Case closed:</span>
+          <span data-hf-id="hf-3rkq" class="h h-s block">add lemon.</span>
+        </div>
+      </section>
+
+      <!-- ===== F11 Fruit & mandi 38.5-42.5 ===== -->
+      <section data-hf-id="hf-d9l1" id="f11" class="clip g-pink" data-start="38.5" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-z907" class="dots"></div>
+        <div data-hf-id="hf-4iyb" class="abs" style="left: 60px; top: 150px">
+          <span data-hf-id="hf-hrgs" id="f11-pill" class="pill label">Live from Gondal mandi</span>
+          <span data-hf-id="hf-ur8s" id="f11-h" class="h h-l block" style="margin-top: 26px">Fruit prices. Live.</span>
+        </div>
+        <div data-hf-id="hf-f471" id="f11-phone" class="phone" style="left: 40px; top: 520px"><img data-hf-id="hf-82o0" src="assets/screens/14-fruit-prices.png" alt="" /></div>
+        <div data-hf-id="hf-tcaa" id="f11-t1" class="burst" style="left: 600px; top: 600px; width: 420px; height: 420px">
+          <div data-hf-id="hf-t6hk" class="bk"></div><div data-hf-id="hf-tyf6" class="fg" style="background:#99E885"></div>
+          <span data-hf-id="hf-4r29" class="txt" style="font-size: 50px; width: 260px">Guava ₹65/kg</span>
+        </div>
+        <div data-hf-id="hf-rtko" id="f11-t2" class="burst" style="left: 620px; top: 980px; width: 400px; height: 400px">
+          <div data-hf-id="hf-ss6j" class="bk"></div><div data-hf-id="hf-xtvi" class="fg" style="background:#F7CB46"></div>
+          <span data-hf-id="hf-ysb0" class="txt" style="font-size: 48px; width: 250px">Banana ₹23/kg</span>
+        </div>
+        <div data-hf-id="hf-qpai" id="f11-cap" class="card abs" style="left: 600px; top: 1410px; width: 430px; padding: 24px 28px">
+          <span data-hf-id="hf-6nxh" class="body block" style="font-size: 36px">Your nani's market wisdom. Now an API.</span>
+        </div>
+      </section>
+
+      <!-- ===== F12 Galaxy Watch 42.5-46 ===== -->
+      <section data-hf-id="hf-1h5h" id="f12" class="clip g-blue" data-start="42.5" data-duration="3.5" data-track-index="1">
+        <div data-hf-id="hf-znb8" class="dots"></div>
+        <div data-hf-id="hf-mgh7" class="center-col" style="top: 150px">
+          <span data-hf-id="hf-gcnx" id="f12-h1" class="h h-l block">Wakes you in</span>
+          <span data-hf-id="hf-rb9c" id="f12-h2" class="h h-l block">light sleep.</span>
+        </div>
+        <div data-hf-id="hf-yl88" id="f12-watch" class="abs" style="left: 240px; top: 560px; width: 600px; height: 600px">
+          <div data-hf-id="hf-ddkq" id="f12-bezel" class="abs" style="inset: 0; border-radius: 50%; background: #222; border: 8px solid #000; box-shadow: 16px 16px 0 #000">
+            <div data-hf-id="hf-auu5" class="abs" style="inset: 18px; border-radius: 50%; border: 14px dashed #777"></div>
+          </div>
+          <div data-hf-id="hf-g39i" class="abs" style="inset: 70px; border-radius: 50%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center">
+            <span data-hf-id="hf-74hn" class="label block" style="color: #C0F7FE">How groggy?</span>
+            <span data-hf-id="hf-atnc" id="f12-pct" class="h block" style="font-size: 150px; color: #fff">0%</span>
+            <span data-hf-id="hf-85z5" class="body block" style="font-size: 30px; color: #bbb">turn the bezel</span>
+          </div>
+        </div>
+        <div data-hf-id="hf-law6" id="f12-s1" class="card abs" style="left: 60px; top: 1250px; width: 960px; padding: 26px 32px">
+          <span data-hf-id="hf-p51u" class="body block">Then asks how groggy you are. Spin the bezel. Be honest.</span>
+        </div>
+        <div data-hf-id="hf-7y7n" id="f12-s2" class="sticker abs" style="left: 160px; top: 1500px; width: 760px; background: #99E885; text-align: center">
+          <span data-hf-id="hf-khif" class="h h-s block">+ a water button.</span>
+          <span data-hf-id="hf-yxrl" class="body block" style="font-weight: 700">Tap = 1 glass. Revolutionary.</span>
+        </div>
+      </section>
+
+      <!-- ===== F13 Connections 46-49 ===== -->
+      <section data-hf-id="hf-t0u1" id="f13" class="clip g-green" data-start="46" data-duration="3" data-track-index="1">
+        <div data-hf-id="hf-tyqc" class="dots"></div>
+        <div data-hf-id="hf-2jf6" class="abs" style="left: 60px; top: 150px">
+          <span data-hf-id="hf-8rcp" id="f13-h1" class="h h-l block">It checks its</span>
+          <span data-hf-id="hf-mg28" id="f13-h2" class="h h-l block">own homework.</span>
+        </div>
+        <div data-hf-id="hf-v9zn" id="f13-list" class="abs" style="left: 60px; top: 560px; width: 960px">
+          <div data-hf-id="hf-efrf" id="f13-r1" class="card" style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center"><span data-hf-id="hf-m6ur" class="h h-s">Health Connect</span><span data-hf-id="hf-vi43" class="h h-m" style="color:#1a9e3f">✓</span></div>
+          <div data-hf-id="hf-orc1" id="f13-r2" class="card" style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; background: #C0F7FE"><span data-hf-id="hf-6ovo" class="h h-s">Galaxy Watch</span><span data-hf-id="hf-l9lf" class="h h-m" style="color:#1a9e3f">✓</span></div>
+          <div data-hf-id="hf-for4" id="f13-r3" class="card" style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; background: #FFDC8B"><span data-hf-id="hf-pyya" class="h h-s">Gemini AI</span><span data-hf-id="hf-kvae" class="h h-m" style="color:#1a9e3f">✓</span></div>
+          <div data-hf-id="hf-meep" id="f13-r4" class="card" style="display: flex; justify-content: space-between; align-items: center; background: #FE90E8"><span data-hf-id="hf-1yo0" class="h h-s">Mandi prices</span><span data-hf-id="hf-kgzd" class="h h-m" style="color:#1a9e3f">✓</span></div>
+        </div>
+        <div data-hf-id="hf-wwru" id="f13-cap" class="center-col" style="top: 1560px"><span data-hf-id="hf-o9fs" class="pill label">Settings › Connections</span></div>
+      </section>
+
+      <!-- ===== F14 Testimonials 49-53.5 ===== -->
+      <section data-hf-id="hf-gey6" id="f14" class="clip g-cream" data-start="49" data-duration="4.5" data-track-index="1">
+        <div data-hf-id="hf-tkfb" class="dots"></div>
+        <div data-hf-id="hf-drpj" class="center-col" style="top: 170px"><span data-hf-id="hf-0ove" id="f14-pill" class="pill label" style="background:#F7CB46">Real* testimonials</span></div>
+        <div data-hf-id="hf-wbee" id="f14-c1" class="card abs" style="left: 70px; top: 330px; width: 940px">
+          <span data-hf-id="hf-85o2" class="h h-s block">“I now know my stomach's ETA.”</span>
+          <span data-hf-id="hf-d6fw" class="label block" style="margin-top: 20px">— Me, 3:07 AM · ★★★★★</span>
+        </div>
+        <div data-hf-id="hf-1ufb" id="f14-c2" class="card abs" style="left: 70px; top: 780px; width: 940px; background: #C0F7FE">
+          <span data-hf-id="hf-0efx" class="h h-s block">“It told me to drink water. I drank water.”</span>
+          <span data-hf-id="hf-ho1j" class="label block" style="margin-top: 20px">— Also me · ★★★★★</span>
+        </div>
+        <div data-hf-id="hf-88mw" id="f14-stamp" class="sticker abs" style="left: 110px; top: 1300px; width: 860px; background: #FE90E8; text-align: center">
+          <span data-hf-id="hf-9zgk" class="body block" style="font-weight: 800">*Results not typical. Results not even measured.</span>
+        </div>
+      </section>
+
+      <!-- ===== F15 CTA 53.5-60 ===== -->
+      <section data-hf-id="hf-u20k" id="f15" class="clip g-black" data-start="53.5" data-duration="6.5" data-track-index="1">
+        <div data-hf-id="hf-g5gn" class="center-col" style="top: 170px">
+          <span data-hf-id="hf-u6mo" id="f15-t1" class="h block" style="font-size: 180px; color: #fff">MEAL</span>
+          <span data-hf-id="hf-wzuw" id="f15-t2" class="h block" style="font-size: 180px; color: #fff">TRACKER</span>
+        </div>
+        <div data-hf-id="hf-ab2x" id="f15-phone" class="phone" style="left: 90px; top: 640px; width: 440px; height: 944px; border-color: #fff; box-shadow: 18px 18px 0 #F7CB46"><img data-hf-id="hf-zjix" src="assets/screens/02-today-cards.png" alt="" /></div>
+        <div data-hf-id="hf-0ywi" id="f15-burst" class="burst" style="left: 560px; top: 640px; width: 480px; height: 480px">
+          <div data-hf-id="hf-7hj4" class="bk" style="background:#fff"></div><div data-hf-id="hf-oew2" class="fg" style="background:#F7CB46"></div>
+          <span data-hf-id="hf-imm4" class="txt" style="width: 300px">
+            <span data-hf-id="hf-z05v" class="block" style="font-size: 40px">Only</span>
+            <span data-hf-id="hf-qzoa" class="block" style="font-size: 84px">₹0.00</span>
+            <span data-hf-id="hf-pxg7" class="block" style="font-size: 40px">*free</span>
+          </span>
+        </div>
+        <div data-hf-id="hf-fsgb" id="f15-op" class="abs" style="left: 570px; top: 1170px; width: 470px; background: #fff; border: 6px solid #fff; box-shadow: 12px 12px 0 #F7CB46; padding: 24px 26px">
+          <span data-hf-id="hf-k3h0" class="h block" style="font-size: 50px">Operators are standing by</span>
+          <span data-hf-id="hf-hdi1" class="body block" style="font-size: 30px; margin-top: 8px">(the operator is a Galaxy Watch)</span>
+        </div>
+        <div data-hf-id="hf-khar" id="f15-foot" class="center-col" style="top: 1640px">
+          <span data-hf-id="hf-md9p" class="label block" style="color: #fff">Phone + Galaxy Watch · Gemini · Health Connect</span>
+          <span data-hf-id="hf-tfyj" class="label block" style="color: #F7CB46; margin-top: 10px">*I built it. It's on GitHub.</span>
+        </div>
+      </section>
+
+      <!-- ===== Infomercial chrome 0-60 ===== -->
+      <div data-hf-id="hf-dvsd" id="chrome" class="clip" data-start="0" data-duration="60" data-track-index="5">
+        <div data-hf-id="hf-omh3" id="live"><div data-hf-id="hf-5ted" id="live-dot"></div><span data-hf-id="hf-3dsf" class="label" style="font-size: 28px">LIVE · 3:07 AM</span></div>
+        <div data-hf-id="hf-bgax" id="chan"><span data-hf-id="hf-9uyf" class="label" style="font-size: 26px">CH 7 · MEAL-TV</span></div>
+        <div data-hf-id="hf-1m6b" id="ticker">
+          <div data-hf-id="hf-1qmc" id="ticker-track">★ CALL NOW ★ OPERATORS ARE STANDING BY ★ NOT SOLD IN STORES ★ NOT SOLD ANYWHERE ★ IT'S FREE ★ CHAI MAY REDUCE IRON ABSORPTION ★ CONSULT YOUR NANI ★ SIDE EFFECTS INCLUDE KNOWING THINGS ★ CALL NOW ★ OPERATORS ARE STANDING BY ★ NOT SOLD IN STORES ★ NOT SOLD ANYWHERE ★ IT'S FREE ★ CHAI MAY REDUCE IRON ABSORPTION ★ CONSULT YOUR NANI ★ SIDE EFFECTS INCLUDE KNOWING THINGS ★</div>
+        </div>
+      </div>
+
+      <audio data-hf-id="hf-8tkh" id="el-bgm" src="assets/audio/infomercial.m4a" data-start="0" data-duration="60" data-track-index="9" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const slam = (sel, at, rot = 0) => tl.fromTo(sel, { scale: 2.4, opacity: 0, rotation: rot * 3 }, { scale: 1, opacity: 1, rotation: rot, duration: 0.35, ease: "back.out(2.2)" }, at);
+      const drop = (sel, at, rot = 0) => tl.fromTo(sel, { y: -260, opacity: 0, rotation: rot - 8 }, { y: 0, opacity: 1, rotation: rot, duration: 0.45, ease: "back.out(1.8)" }, at);
+      const rise = (sel, at, rot = 0) => tl.fromTo(sel, { y: 1300, rotation: rot + 6 }, { y: 0, rotation: rot, duration: 0.7, ease: "expo.out" }, at);
+      const pop = (sel, at, rot = 0) => tl.fromTo(sel, { scale: 0, opacity: 0, rotation: rot - 20 }, { scale: 1, opacity: 1, rotation: rot, duration: 0.45, ease: "back.out(2.5)" }, at);
+      const fadeUp = (sel, at) => tl.fromTo(sel, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, at);
+      const count = (sel, from, to, at, dur) => { const o = { v: from }; tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate: () => { document.querySelector(sel).textContent = Math.round(o.v) + "%"; } }, at); };
+
+      // Chrome: live dot blinks, ticker crawls for the whole minute.
+      tl.fromTo("#live-dot", { opacity: 1 }, { opacity: 0.15, duration: 0.5, repeat: 59, yoyo: true, ease: "steps(1)" }, 0);
+      tl.fromTo("#ticker-track", { x: 1080 }, { x: -4200, duration: 60, ease: "none" }, 0);
+
+      // F1
+      tl.fromTo("#f01-static", { opacity: 1, backgroundPositionY: 0 }, { backgroundPositionY: 400, duration: 0.55, ease: "steps(11)" }, 0);
+      tl.to("#f01-static", { opacity: 0, duration: 0.05 }, 0.55);
+      slam("#f01-w1", 0.5, -3); slam("#f01-w2", 1.0, 2); slam("#f01-w3", 1.5, -2); slam("#f01-w4", 2.0, 3);
+      pop("#f01-aside", 3.0, -2);
+
+      // F2
+      pop("#f02-pill", 4.1, 2);
+      drop("#f02-c1", 4.45, -2); drop("#f02-c2", 5.95, 2); drop("#f02-c3", 7.45, -1.5);
+      tl.fromTo("#f02-c1, #f02-c2, #f02-c3", { x: 0 }, { x: 10, duration: 0.06, repeat: 5, yoyo: true, ease: "none" }, 8.4);
+
+      // F3
+      pop("#f03-intro", 9.05, -3);
+      slam("#f03-t1", 9.2, -2); slam("#f03-t2", 9.4, 1);
+      rise("#f03-phone", 9.25, -4);
+      pop("#f03-burst", 9.9, 12);
+      tl.to("#f03-burst", { rotation: 40, duration: 2, ease: "none" }, 10.35);
+
+      // F4
+      pop("#f04-pill", 12.05, -3); fadeUp("#f04-h", 12.15);
+      rise("#f04-phone", 12.0, -3);
+      slam("#f04-s1", 13.5, 4); slam("#f04-s2", 14.6, -3);
+      fadeUp("#f04-cap", 15.2);
+
+      // F5
+      slam("#f05-h1", 16.55, -2); slam("#f05-h2", 16.75, 1);
+      rise("#f05-phone", 16.6, 3);
+      pop("#f05-chip", 18.0, 6);
+      fadeUp("#f05-foot", 18.6);
+
+      // F6
+      slam("#f06-h1", 20.05, -2); fadeUp("#f06-h2", 20.35);
+      rise("#f06-phone", 20.0, -3);
+      pop("#f06-num-wrap", 20.4, 3); count("#f06-num", 0, 63, 20.5, 1.5);
+      slam("#f06-s1", 22.4, -4);
+
+      // F7 BUT WAIT
+      pop("#f07-burst", 24.05, 0);
+      tl.to("#f07-burst", { rotation: 30, duration: 1.4, ease: "none" }, 24.5);
+      slam("#f07-text", 24.1, -3);
+      tl.fromTo("#f07-text", { x: -18 }, { x: 18, duration: 0.05, repeat: 9, yoyo: true, ease: "none" }, 24.45);
+
+      // F8
+      pop("#f08-pill", 25.55, -2); fadeUp("#f08-h", 25.65);
+      tl.fromTo("#f08-zoom", { y: 900, rotation: 4 }, { y: 0, rotation: -1, duration: 0.6, ease: "expo.out" }, 25.5);
+      tl.fromTo("#f08-b", { opacity: 0, x: 140 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 27.0);
+      slam("#f08-s1", 27.6, -4); slam("#f08-s2", 29.0, 3);
+
+      // F9 muscles: flip front -> back
+      slam("#f09-h1", 30.55, -2); fadeUp("#f09-h2", 30.8);
+      rise("#f09-phone", 30.5, 2);
+      tl.fromTo("#f09-back", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 30.5);
+      tl.to("#f09-phone", { rotationY: 90, duration: 0.22, ease: "power2.in" }, 32.35);
+      tl.to("#f09-back", { opacity: 1, duration: 0.01 }, 32.57);
+      tl.fromTo("#f09-phone", { rotationY: -90 }, { rotationY: 0, duration: 0.3, ease: "back.out(1.6)" }, 32.58);
+      tl.fromTo("#f09-h1, #f09-h2", { opacity: 1 }, { opacity: 0, duration: 0.12 }, 32.4);
+      tl.fromTo("#f09-h3wrap", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 30.5);
+      tl.to("#f09-h3wrap", { opacity: 1, duration: 0.01 }, 32.5);
+      slam("#f09-h3", 32.5, 2); fadeUp("#f09-h4", 32.85);
+
+      // F10 WANTED
+      tl.fromTo("#f10-poster", { y: -1300, rotation: -12 }, { y: 0, rotation: -3, duration: 0.5, ease: "bounce.out" }, 34.5);
+      tl.fromTo("#f10-zoom", { y: 700 }, { y: 0, duration: 0.55, ease: "expo.out" }, 35.4);
+      slam("#f10-stamp", 36.0, 5);
+
+      // F11 fruit
+      pop("#f11-pill", 38.55, -2); fadeUp("#f11-h", 38.65);
+      rise("#f11-phone", 38.5, -3);
+      pop("#f11-t1", 39.5, -10); pop("#f11-t2", 40.6, 8);
+      tl.to("#f11-t1", { rotation: 10, duration: 2.5, ease: "none" }, 39.95);
+      tl.to("#f11-t2", { rotation: -8, duration: 1.4, ease: "none" }, 41.05);
+      fadeUp("#f11-cap", 41.2);
+
+      // F12 watch
+      slam("#f12-h1", 42.55, -2); slam("#f12-h2", 42.75, 1);
+      pop("#f12-watch", 42.6, 0);
+      tl.fromTo("#f12-bezel", { rotation: 0 }, { rotation: 120, duration: 1.2, ease: "steps(10)" }, 43.0);
+      count("#f12-pct", 0, 37, 43.0, 1.2);
+      fadeUp("#f12-s1", 44.1);
+      slam("#f12-s2", 45.0, -2);
+
+      // F13 connections
+      slam("#f13-h1", 46.05, -2); slam("#f13-h2", 46.2, 1);
+      drop("#f13-r1", 46.55, -1); drop("#f13-r2", 47.05, 1); drop("#f13-r3", 47.55, -1); drop("#f13-r4", 48.05, 1);
+      fadeUp("#f13-cap", 48.3);
+
+      // F14 testimonials
+      pop("#f14-pill", 49.1, -3);
+      drop("#f14-c1", 49.95, -2); drop("#f14-c2", 51.45, 2);
+      slam("#f14-stamp", 52.8, -3);
+
+      // F15 CTA
+      slam("#f15-t1", 53.55, -2); slam("#f15-t2", 53.75, 1);
+      rise("#f15-phone", 54.0, -5);
+      pop("#f15-burst", 55.0, 10);
+      tl.to("#f15-burst", { rotation: 30, duration: 4.5, ease: "none" }, 55.45);
+      slam("#f15-op", 56.5, -2);
+      fadeUp("#f15-foot", 57.4);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

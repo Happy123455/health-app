@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "preferences": {
+    "destination": {
+      "value": "shorts",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:01:33.875Z"
+    },
+    "aspect": {
+      "value": "1080x1920",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:01:37.727Z"
+    },
+    "language": {
+      "value": "en",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:01:37.757Z"
+    },
+    "flow": {
+      "value": "automation",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:01:37.783Z"
+    },
+    "storyboard": {
+      "value": "no",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:01:37.810Z"
+    },
+    "style_preset.product-launch-video": {
+      "value": "blockframe",
+      "confirmed_in": [
+        "meal-tracker-infomercial"
+      ],
+      "updated_at": "2026-10-18T17:05:10.941Z"
+    }
+  },
+  "sightings": {}
+}
